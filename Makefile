@@ -79,8 +79,8 @@ test:
 build: clean
 	@echo " -> Building"
 	mkdir -p bin
-	CGO_ENABLED=0 go build -trimpath -o bin/terraform-provider-proxmox
-	@echo "Built terraform-provider-proxmox"
+	CGO_ENABLED=0 go build -trimpath -o bin/terraform-provider-bve
+	@echo "Built terraform-provider-bve"
 
 # to run only certain tests, run something of the form:  make acctest TESTARGS='-run=TestAccProxmoxVmQemu_DiskSlot'
 acctest: build
