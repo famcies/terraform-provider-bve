@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/Telmate/terraform-provider-proxmox/v2/proxmox"
+	"github.com/famcies/terraform-provider-bve/v2/proxmox"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 )
