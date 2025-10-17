@@ -1,4 +1,4 @@
-module github.com/Telmate/terraform-provider-proxmox/v2
+module github.com/famcies/terraform-provider-bve/v2
 
 go 1.24
 
