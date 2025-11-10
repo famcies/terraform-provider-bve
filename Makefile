@@ -9,13 +9,14 @@ COMMITS_SINCE_TAG  := $(word 2,$(DESCRIBE_PARTS))
 VERSION            := $(subst v,,$(VERSION_TAG))
 VERSION_PARTS      := $(subst ., ,$(VERSION))
 
-MAJOR              := $(word 1,$(VERSION_PARTS))
-MINOR              := $(word 2,$(VERSION_PARTS))
-MICRO              := $(word 3,$(VERSION_PARTS))
+# 添加默认值，避免非数字导致算术错误
+MAJOR              := $(or $(word 1,$(VERSION_PARTS)),0)
+MINOR              := $(or $(word 2,$(VERSION_PARTS)),0)
+MICRO              := $(or $(word 3,$(VERSION_PARTS)),0)
 
 NEXT_MAJOR         := $(shell echo $$(($(MAJOR)+1)))
 NEXT_MINOR         := $(shell echo $$(($(MINOR)+1)))
-NEXT_MICRO          = $(shell echo $$(($(MICRO)+1)))
+NEXT_MICRO         := $(shell echo $$(($(MICRO)+1)))
 
 ifeq ($(strip $(COMMITS_SINCE_TAG)),)
 CURRENT_VERSION_MICRO := $(MAJOR).$(MINOR).$(MICRO)
@@ -82,19 +83,20 @@ build: clean
 	CGO_ENABLED=0 go build -trimpath -o bin/terraform-provider-bve
 	@echo "Built terraform-provider-bve"
 
-# to run only certain tests, run something of the form:  make acctest TESTARGS='-run=TestAccProxmoxVmQemu_DiskSlot'
+# to run only certain tests, run something of the form:  make acctest TESTARGS='-run=TestAccBveVmQemu_DiskSlot'
 acctest: build
-	TF_ACC=1 go test ./proxmox $(TESTARGS)
+	TF_ACC=1 go test ./bve $(TESTARGS)
 
 install: build
-	cp bin/terraform-provider-proxmox $$GOPATH/bin/terraform-provider-proxmox
+	cp bin/terraform-provider-bve $$GOPATH/bin/terraform-provider-bve
 
 local-dev-install: build
 	@echo "Building this release $(CURRENT_VERSION_MICRO) on $(KERNEL)/$(ARCH)"
-	rm -rf ~/.terraform.d/plugins/localhost/telmate/proxmox
-	mkdir -p ~/.terraform.d/plugins/localhost/telmate/proxmox/$(MAJOR).$(MINOR).$(NEXT_MICRO)/$(KERNEL)_$(ARCH)/
-	cp bin/terraform-provider-proxmox ~/.terraform.d/plugins/localhost/telmate/proxmox/$(MAJOR).$(MINOR).$(NEXT_MICRO)/$(KERNEL)_$(ARCH)/
-
+	rm -rf ~/.terraform.d/plugins/localhost/yourname/bve  # 替换 yourname 为您的用户名或组织名
+	mkdir -p ~/.terraform.d/plugins/localhost/yourname/bve/$(MAJOR).$(MINOR).$(NEXT_MICRO)/$(KERNEL)_$(ARCH)/
+	cp bin/terraform-provider-bve ~/.terraform.d/plugins/localhost/yourname/bve/$(MAJOR).$(MINOR).$(NEXT_MICRO)/$(KERNEL)_$(ARCH)/
 
 clean:
-	@git clean -f -d
+	@echo " -> Cleaning"
+	rm -rf bin/  # 只清理 bin/ 目录
+	# @git clean -f -d  # 注释掉，避免删除源代码目录如 bve/

@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 
-	"github.com/famcies/terraform-provider-bve/v2/proxmox"
+	"github.com/famcies/terraform-provider-bve/bve"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 )
@@ -18,7 +18,7 @@ func main() {
 	flag.Parse()
 
 	opts := &plugin.ServeOpts{ProviderFunc: func() *schema.Provider {
-		return proxmox.Provider()
+		return bve.Provider()
 	}, Debug: debugMode, ProviderAddr: pluginPath}
 
 	plugin.Serve(opts)

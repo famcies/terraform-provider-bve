@@ -1,4 +1,4 @@
-module github.com/famcies/terraform-provider-bve/v2
+module github.com/famcies/terraform-provider-bve
 
 go 1.24
 
